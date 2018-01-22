@@ -9,13 +9,13 @@ import {
   AppRegistry,
     View,
 } from 'react-native';
-import App from './App.js'
+import InitialComponent from "./Components/InitialComponent";
 
 export default class React_Native_App extends Component {
   render(){
     return(
         <View style = {{flex: 1}}>
-          <App/>
+          <InitialComponent/>
         </View>
     )
   }

@@ -15,27 +15,27 @@ import Navigation from 'react-native-navigation';
 import Icon from 'react-native-vector-icons/FontAwesome'
 import {Dimensions} from 'react-native'
 
-import HomeView from './Components/HomeView.js'
-import SearchView from './Components/SearchView.js'
-import AddPhotoView from './Components/AddPhotoView.js'
-import FollowView from './Components/FollowView.js'
-import UserView from './Components/UserView.js'
+import HomeView from './HomeView.js'
+import SearchView from './SearchView.js'
+import AddPhotoView from './AddPhotoView.js'
+import FollowView from './FollowView.js'
+import UserView from './UserView.js'
 
 const deviceW = Dimensions.get('window').width
 
 const basePx = 375
 
-const rightButtonConfig =[ {
-    title: 'Next',
-    handler: () => alert('hello!'),
-}, {title: 'Next2'} ];
-
-const leftButtonConfig = [ {
-    handler: () => alert('helloWorld!')},
-    {    icon: require('./Image/Send.png'),
-        id: "ABC"
-    }
-]
+// const rightButtonConfig =[ {
+//     title: 'Next',
+//     handler: () => alert('hello!'),
+// }, {title: 'Next2'} ];
+//
+// const leftButtonConfig = [ {
+//     handler: () => alert('helloWorld!')},
+//     {    icon: require('./Image/Send.png'),
+//         id: "ABC"
+//     }
+// ]
 
 
 const titleConfig = {
@@ -79,13 +79,6 @@ export default class App extends Component {
     render() {
         return (
             <View style = {{flex: 1}}>
-                {/*<Navigation*/}
-                    {/*style = {{height: this.state.navBarHeight}}*/}
-                    {/*tintColor={'#EBF0E6'}*/}
-                    {/*title={titleConfig}*/}
-                    {/*rightButton={rightButtonConfig}*/}
-                    {/*leftButton={leftButtonConfig}*/}
-                {/*/>*/}
 
                 <TabNavigator style={styles.container}>
                 <TabNavigator.Item
