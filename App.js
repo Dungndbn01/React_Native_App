@@ -71,10 +71,13 @@ class Profile extends Component {
 }
 
 export default class App extends Component {
-    state= {
-        selectedTab: 'home',
-        navBarHeight: 44
-    };
+    constructor(props) {
+        super(props)
+        this.state= {
+            selectedTab: 'home',
+            navBarHeight: 44
+        };
+    }
 
     render() {
         return (
