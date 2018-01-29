@@ -14,20 +14,36 @@ import { firebaseApp } from "./Components/FirebaseConfig";
 import InitialComponent from "./Components/InitialComponent";
 
 export default class React_Native_App extends Component {
-  render(){
-    //   if (firebaseApp.auth() === null) {
-    //   return(
-    //     <View style = {{flex: 1}}>
-    //       <App/>
-    //     </View>
-    // ) }
-    // else return (
-      return(
-        <View style = {{flex: 1}}>
-            <InitialComponent/>
-        </View>
-      )
-  }
-}
+    render() {
+        if (firebaseApp.auth().currentUser !== "") {
+            return (
+                <View style={{flex: 1}}>
+                    <InitialComponent/>
+                </View>
+            )
+            }
+            else return (
+                <View style = {{flex: 1}}>
+                    <App/>
+                </View>
+              )
+        }
+        // firebaseApp.auth().onAuthStateChanged((user) => {
+        //     if (user) {
+        //         return (
+        //             <View style={{flex: 1}}>
+        //                 <InitialComponent/>
+        //             </View>
+        //         )
+        //     } else {
+        //         return (
+        //             <View style={{flex: 1}}>
+        //                 <App/>
+        //             </View>
+        //         )
+        //     }
+        // });
 
-AppRegistry.registerComponent('React_Native_App', () => React_Native_App);
+    }
+
+  AppRegistry.registerComponent('React_Native_App', () => React_Native_App)

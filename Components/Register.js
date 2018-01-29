@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import {View, Button, Dimensions, Text, TextInput, Alert, Image, Platform} from 'react-native';
+import {View, Button, Dimensions, Text, TextInput, Alert, Image, Platform, AsyncStorage} from 'react-native';
 
 import {firebaseApp} from "./FirebaseConfig.js";
 import ImagePicker from "react-native-image-picker";
@@ -57,43 +57,83 @@ export default class Register extends Component {
         super(props)
         this.openCamera = this.openCamera.bind(this)
         this.register = this.register.bind(this)
-        this.state = { email: '', password: '', avatarSource: require('./Send.png'), uploadURL: ''}
+        this.state = { name: '', email: 'abc', password: '', avatarSource: require('./Send.png'), uploadURL: ''}
     }
 
     openCamera() {
+        ImagePicker.launchImageLibrary(options, (response)  => {
+            let source = { uri: response.uri }
+            this.setState({
+                avatarSource: source,
+            });
 
-        ImagePicker.showImagePicker(options, (response) => {
-            console.log('Response = ', response);
+            uploadImage(response.uri)
+                .then(url => this.setState({ uploadURL: url }))
+                .catch(error => console.log(error))
 
-            if (response.didCancel) {
-                console.log('User cancelled image picker');
-            }
-            else if (response.error) {
-                console.log('ImagePicker Error: ', response.error);
-            }
-            else if (response.customButton) {
-                console.log('User tapped custom button: ', response.customButton);
-            }
-            else {
-                let source = { uri: response.uri };
-                this.setState({
-                    avatarSource: source
-                });
-
-                uploadImage(source)
-                    .then(url => this.setState({ uploadURL: url }))
-                    .catch(error => console.log(error))
-
-                // You can also display the image using data:
-                // let source = { uri: 'data:image/jpeg;base64,' + response.data };
-
-            }
         });
+
+        // ImagePicker.showImagePicker(options, (response) => {
+        //     console.log('Response = ', response);
+        //
+        //     if (response.didCancel) {
+        //         console.log('User cancelled image picker');
+        //     }
+        //     else if (response.error) {
+        //         console.log('ImagePicker Error: ', response.error);
+        //     }
+        //     else if (response.customButton) {
+        //         console.log('User tapped custom button: ', response.customButton);
+        //     }
+        //     else {
+        //         let source = { uri: response.uri };
+        //         this.setState({
+        //             avatarSource: source,
+        //             uploadURL: response.uri
+        //         });
+        //
+        //         uploadImage(response.uri)
+        //             .then(url => this.setState({ uploadURL: response.uri }))
+        //             .catch(error => console.log(error))
+        //
+        //         // You can also display the image using data:
+        //         // let source = { uri: 'data:image/jpeg;base64,' + response.data };
+        //
+        //     }
+        // });
+    }
+
+    saveData = async() => {
+        try {
+            await AsyncStorage.setItem("profileImageURL", this.state.uploadURL);
+            console.log('SAVE OKKKKKKK')
+        }catch(error) {
+            console.log(error)
+        }
+    }
+
+    createUserDB() {
+        let uid = firebaseApp.auth().currentUser.uid
+        this.userRef = firebaseApp.database().ref(uid)
+        this.userRef.set({
+            profileImageURL: this.state.uploadURL,
+            email: this.state.email,
+            name: this.state.name,
+            bio: "",
+            phone: "",
+            gender: "",
+            website: "",
+            userName: "",
+        })
     }
 
     register() {
+        this.saveData()
+        // this.createUserDB()
+
         firebaseApp.auth().createUserWithEmailAndPassword(this.state.email, this.state.password)
             .then(()=>{
+                this.createUserDB()
                     Alert.alert(
                         'Notice',
                         'Register Successful',
@@ -130,6 +170,17 @@ export default class Register extends Component {
 
                 <View style = {{flexDirection: 'row', marginTop: 20}}>
                     <Text style = {{height: 40, width: 88, marginLeft: 8, fontSize: 20}}>
+                        Name
+                    </Text>
+                    <TextInput
+                        style={{height: 40, marginLeft: 20, width: 250, borderWidth: 1, borderColor: 'gray', borderRadius: 8}}
+                        placeholder="Type name here!"
+                        onChangeText={(text) => this.setState({name: text})}
+                    />
+                </View>
+
+                <View style = {{flexDirection: 'row', marginTop: 20}}>
+                    <Text style = {{height: 40, width: 88, marginLeft: 8, fontSize: 20}}>
                         Email
                     </Text>
                     <TextInput
@@ -138,6 +189,7 @@ export default class Register extends Component {
                         onChangeText={(text) => this.setState({email: text})}
                     />
                 </View>
+
                 <View style = {{flexDirection: 'row', marginTop: 20}}>
                     <Text style = {{height: 40, width: 88, marginLeft: 8, fontSize: 20}}>
                         Password

@@ -1,23 +1,43 @@
 import React, { Component } from 'react';
 import {
-    View, Dimensions, TouchableOpacity, Image, Text, Modal, Button, ScrollView, RefreshControl
+    View, Dimensions, TouchableOpacity, Image, Text, Modal, Button, ScrollView, RefreshControl, Alert
 } from 'react-native';
 import EditProfile from './EditProfile.js'
 import NavigationBar from 'react-native-navigation-bar'
+import {firebaseApp} from "./FirebaseConfig";
 
 const width = Dimensions.get('window').width
 
 export default class UserView extends Component {
     constructor(props) {
         super(props)
+        this.getText()
+        this.listenForItems()
         this.state = {
             modalVisible: false,
             refreshing: false,
-            array: [1,2,3]
+            array: [1,2,3],
+            userName: 'Nguyen Dinh Dung'
         };
         this.openModal = this.openModal.bind(this)
         this.closeModal = this.closeModal.bind(this)
         this.loadNewDataToTop = this.loadNewDataToTop.bind(this)
+    }
+
+    listenForItems() {
+        let uid = firebaseApp.auth().currentUser.uid
+        this.userRef = firebaseApp.database().ref(uid)
+        // var items = [];
+        this.userRef.on('value', (dataSnapshot) => {
+            // items.push({
+            //     name: dataSnapshot.val(),
+            //     key: dataSnapshot.key
+            // });
+            this.setState({
+                profileImageURL: dataSnapshot.val().profileImageURL,
+                userName: dataSnapshot.val().name
+            })
+        })
     }
 
     openModal() {
@@ -39,8 +59,18 @@ export default class UserView extends Component {
 
         this.setState({refreshing: false, array: array})
     }
-    
+
+    getText = async() => {
+        try {
+            let v = await AsyncStorage.getItem("profileImageURL")
+            this.setState({"profileImageURL": v})
+        }catch(error) {
+            console.log(error)
+        }
+    }
+
     render(){
+        let pic = {uri: this.state.profileImageURL}
         return(
             <View>
             <NavigationBar
@@ -74,11 +104,11 @@ export default class UserView extends Component {
                 </Modal>
 
                 <View style = {{flexDirection: 'row', justifyContent: 'center', height: 80, width: width, backgroundColor: 'green'}}>
-                    <View style = {{ marginTop: 12, marginLeft: 12, height: 64, width: 64, borderRadius: 32, backgroundColor: 'purple'}}>
-                    <TouchableOpacity>
-                        <Image source = {require('./Camera.png')} />
+                    {/*<View style = {{ marginTop: 12, marginLeft: 12, height: 64, width: 64, borderRadius: 32}}>*/}
+                    <TouchableOpacity style = {{ marginTop: 12, marginLeft: 12, height: 64, width: 64, borderRadius: 32}}>
+                        <Image source = { pic } style={{width: 64, height: 64, borderRadius: 32}} />
                     </TouchableOpacity>
-                    </View>
+                    {/*</View>*/}
 
                     <View style = {{flexGrow: 1, flexDirection: 'column', justifyContent: 'center', marginLeft: 20, marginRight: 0, marginTop: 0, marginBottom: 0 }}>
                         <View style = {{backgroundColor: 'red', flexGrow: 1, marginLeft: 0, marginTop: 0, marginRight: 0, height: 40}}>
@@ -99,18 +129,27 @@ export default class UserView extends Component {
                 </View>
 
                 <Text style = {{marginLeft: 12}}>
-                    Nguyen Dinh Dung
+                    {this.state.userName}
                 </Text>
 
                 <View style = {{marginTop: 12, marginLeft: 0, marginRight: 0, height: 50, width: width,
                 flexDirection: 'row', backgroundColor: 'purple'}}>
                     <View
-                           style = {{marginLeft: 0, marginTop: 0, marginBottom: 0, width: width/4}} >
+                           style = {{backgroundColor: 'pink', marginLeft: 0, marginTop: 0, marginBottom: 0, width: width/4}} >
+                    </View>
+                    <View
+                        style = {{backgroundColor: 'green', marginLeft: 0, marginTop: 0, marginBottom: 0, width: width/4}} >
+                    </View>
+                    <View
+                        style = {{backgroundColor: 'pink', marginLeft: 0, marginTop: 0, marginBottom: 0, width: width/4}} >
+                    </View>
+                    <View
+                        style = {{backgroundColor: 'green', marginLeft: 0, marginTop: 0, marginBottom: 0, width: width/4}} >
                     </View>
 
                 </View>
 
-                <View style = {{flexGrow: 1, alignItems: 'center', marginTop: 0, marginLeft: 0, marginBottom: 0, marginRight: 0, backgroundColor: 'red'}}>
+                <View style = {{flexGrow: 1, alignItems: 'center', marginTop: 0, marginLeft: 0, marginBottom: 0, marginRight: 0}}>
                     <View style = {{marginTop: 68, width: 68, height: 68, borderRadius: 34, backgroundColor: 'green'}}>
 
                     </View>
