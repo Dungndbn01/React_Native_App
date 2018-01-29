@@ -6,6 +6,7 @@
 
 import React, { Component } from 'react';
 import {
+    Alert,
     StyleSheet,
     Text,
     View,
@@ -36,7 +37,6 @@ const leftButtonConfig = [ {
         id: "ABC"
     }
 ]
-
 
 const titleConfig = {
     title: 'Instagram',
@@ -71,6 +71,7 @@ class Profile extends Component {
 }
 
 export default class App extends Component {
+
     constructor(props) {
         super(props)
         this.state= {
@@ -82,13 +83,6 @@ export default class App extends Component {
     render() {
         return (
             <View style = {{flex: 1}}>
-                {/*<Navigation*/}
-                    {/*style = {{height: this.state.navBarHeight}}*/}
-                    {/*tintColor={'#EBF0E6'}*/}
-                    {/*title={titleConfig}*/}
-                    {/*rightButton={rightButtonConfig}*/}
-                    {/*leftButton={leftButtonConfig}*/}
-                {/*/>*/}
 
                 <TabNavigator style={styles.container}>
                 <TabNavigator.Item
@@ -97,9 +91,9 @@ export default class App extends Component {
                     selectedTitleStyle={{color: "#3496f0"}}
                     renderIcon={() => <Icon name="home" size={px2dp(22)} color="#666"/>}
                     renderSelectedIcon={() => <Icon name="home" size={px2dp(22)} color="#3496f0"/>}
-                    badgeText="2"
+                    // badgeText="2"
                     onPress={() => this.setState({selectedTab: 'home', navBarHeight: 44})}>
-                    <HomeView/>
+                    <HomeView logOut = {this.props.setParentState}/>
                 </TabNavigator.Item>
 
                 <TabNavigator.Item

@@ -2,26 +2,30 @@ import React, { Component } from 'react';
 import {
     View,
     ScrollView,
-    Text
+    Text,
+    Alert,
+    Image,
+    TouchableOpacity
 } from 'react-native';
 
 import NavigationBar from 'react-native-navigation-bar'
 import { firebaseApp } from "./FirebaseConfig";
 
 export default class HomeView extends Component {
-    logOut() {
-        try {
-            console.log('YOu have just log out ')
-             firebaseApp.auth().signOut();
-        } catch (e) {
-            consle.log('You cant log out')
-            console.log(e);
-        }
-    }
+    // logOut(){
+    //
+    //     try {
+    //          firebaseApp.auth().signOut();
+    //     } catch (e) {
+    //         Alert.alert('XYZ ABC')
+    //         console.log(e);
+    //     }
+    // }
 
     render(){
         return(
-            <View>
+            <View style = {{flex: 1 ,backgroundColor: 'red'}}>
+
                 <NavigationBar
                     title={'Edit Profile'}
                     height={44}
@@ -31,18 +35,18 @@ export default class HomeView extends Component {
                     leftButtonTitle={'Cancel'}
                     leftButtonTitleColor={'#000000'}
                     onLeftButtonPress={this.props.setParentState}
-                    // rightButtonIcon={}
+                    // rightButtonIcon={require('./Send.png')}
                     rightButtonTitle={'Logout'}
                     rightButtonTitleColor={'#000000'}
-                    onRightButtonPress={this.logOut()}
+                    // onRightButtonPress={this.props.logOut}
                 />
-                <ScrollView>
-            <View style = {{flex: 1, alignItems:'center', justifyContent:'center'}}>
-            <Text style = {{flex: 1, marginTop: 200}}>
-                ABC
-            </Text>
-            </View>
-            </ScrollView>
+                {/*<ScrollView>*/}
+            {/*<View style = {{flex: 1, alignItems:'center', justifyContent:'center', marginTop: 100}}>*/}
+            {/*<Text style = {{flex: 1, marginTop: 200}}>*/}
+                {/*ABC*/}
+            {/*</Text>*/}
+            {/*</View>*/}
+            {/*</ScrollView>*/}
             </View>
         )
     }

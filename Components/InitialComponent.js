@@ -9,9 +9,9 @@ export default class InitialComponent extends Component {
         switch (route.name) {
             case 'Register': return (<Register goToLogin = { () => {navigator.pop({name: 'Login'})}}/>)
             case 'Login': return(<Login goToRegister = { () => {navigator.push({name: 'Register'})} }
-                                        goToApp = { () => {navigator.push({name: 'App'})} }
+                                        // goToApp = { () => {navigator.push({name: 'App'})} }
             />)
-            case 'App': return (<App/>)
+            // case 'App': return (<App backtoLogin = { () => {navigator.push({name: 'Login'})}}/>)
         }
     }
     render() {

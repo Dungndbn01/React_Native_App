@@ -15,13 +15,14 @@ import InitialComponent from "./Components/InitialComponent";
 
 export default class React_Native_App extends Component {
   render(){
-      if (firebaseApp.auth !== null) {
+    //   if (firebaseApp.auth() === null) {
+    //   return(
+    //     <View style = {{flex: 1}}>
+    //       <App/>
+    //     </View>
+    // ) }
+    // else return (
       return(
-        <View style = {{flex: 1}}>
-          <App/>
-        </View>
-    ) }
-    else return (
         <View style = {{flex: 1}}>
             <InitialComponent/>
         </View>

@@ -1,16 +1,28 @@
 import React, {Component} from 'react';
-import {Text, TextInput, View, StyleSheet, ScrollView, Dimensions, Button, Alert, Navigator} from 'react-native';
+import {Text, TextInput, View, StyleSheet, ScrollView, Dimensions, Button, Alert, Navigator, Modal} from 'react-native';
 
 import {firebaseApp} from "./FirebaseConfig.js";
 import Swiper from 'react-native-swiper';
-import Modal from 'react-native-modal';
 import Register from './Register.js'
+import App from './App.js'
 
 export default class Login extends Component {
     constructor(props) {
         super(props);
         this.login = this.login.bind(this)
-        this.state = {text: '', isModalVisible: false, email: '', password: ''};
+        this.state = {text: '', isModalVisible: false, email: '', password: '',modalVisible: false,};
+        this.openModal = this.openModal.bind(this)
+        this.closeModal = this.closeModal.bind(this)
+
+    }
+
+    openModal() {
+        this.setState({modalVisible:true});
+    }
+
+    closeModal() {
+        Alert.alert('AJHAShdsfjkshdf')
+        this.setState({modalVisible:false});
     }
 
     login() {
@@ -21,7 +33,7 @@ export default class Login extends Component {
                         'Notice',
                         'Login Successful',
                         [ { text: 'Cancel', onPress: () => console.log('Cancel Pressed'), style: 'cancel' },
-                            {text: 'OK', onPress: () => this.props.goToApp()} ],
+                            {text: 'OK', onPress: () => {this.openModal()}} ],
                         {cancelable: false}
                     )
 
@@ -43,12 +55,18 @@ export default class Login extends Component {
             })
     }
 
-
     render() {
         return (
                         <View>
+                            <Modal
+                                visible={this.state.modalVisible}
+                                animationType={'slide'}
+                                // onRequestClose={() => this.closeModal()}
+                            >
+                                <App setParentState = { ()=>{this.closeModal()}}/>
+                            </Modal>
 
-                    <View style = {{marginTop: 0, marginLeft: 0, marginRight: 0, height: 200, backgroundColor: 'red'}}>
+                            <View style = {{marginTop: 0, marginLeft: 0, marginRight: 0, height: 200, backgroundColor: 'red'}}>
                     <Swiper style={styles.wrapper} showsButtons={true}>
                     <View style={styles.slide1}>
                         <Text style={styles.text}>Slide 1</Text>
